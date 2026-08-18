@@ -3,7 +3,7 @@
     "header": {
         "description":"By @YasserNull",
         "name": "Chest overlay",
-        "uuid": "f1a50c4c-c3ec-46da-890a-a88492a557a8",
+        "uuid": "8a4dd30d-3a79-44fb-a794-d36e16990e3a",
         "version": [1, 0, 0],
         "min_engine_version": [ 1, 14, 0 ]
     },
@@ -11,7 +11,7 @@
         {
             "description": "By @YasserNull",
             "type": "resources",
-            "uuid": "7ab6dbaf-0932-49ee-aa96-9248da5c42d8",
+            "uuid": "4b30813a-6833-4914-b599-866e4202781d",
             "version": [1, 0, 0]
         }
     ]
