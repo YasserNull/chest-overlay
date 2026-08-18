@@ -1,0 +1,362 @@
+/********************************************************
++*   (c) Mojang. All rights reserved                       *
++*   (c) Microsoft. All rights reserved.                   *
++*********************************************************/
+/*
+  "is_showing_menu": false, لجعل شاشة متراكبة
+  "absorbs_input": false, لسماح ب أحداث المس ان تمر
+  "render_only_when_topmost": false, لكي لا يتم التوقف عن رسم شاشة hud_screen
+  "low_frequency_rendering": true, لكي يتم رسم شاشة الصندوق بمعدل اطارات منخفض عن العبة
+  "render_game_behind": true, لكي يتم استمرار في رسم العبة
+  "close_on_player_hurt": false, لكي لا تغلق الشاشة عند تضرر الاعب
+*/
+{
+  "namespace": "chest",
+
+  // ~ toggle to show/hide chest ui
+  "chest_ui_options_toggle@settings_common.option_toggle_control": {
+    "$toggle_name": "chest_ui_options",
+    "$toggle_state_binding_name": "#chest_ui_options"
+  },
+
+  "chest_ui_option_toggle@settings_common.option_toggle": {
+    "$option_label": "show chest ui",
+    "anchor_to": "top_left",
+    "anchor_from": "top_left",
+    "$control_name": "chest.chest_ui_options_toggle",
+    "$option_binding_name": "#chest_ui_options"
+    // add that to common.toggle "prevent_touch_input":true to fix touch
+  },
+
+  ////---------------------------------------------------------------------------
+  //// #slot region area
+  ////---------------------------------------------------------------------------
+
+  "chest_label": {
+    "type": "label",
+    "layer": 2,
+    "offset": [ 7, -1 ],
+    "size": [ "90%", "default" ],
+    "anchor_from": "top_left",
+    "anchor_to": "top_left",
+    "text": "$container_title",
+    "color": "$title_text_color",
+    "localize": "$localize_title",
+    "enable_profanity_filter": true
+  },
+
+  "chest_grid_item@common.container_item": {
+    "$item_collection_name": "container_items"
+  },
+
+  "small_chest_grid": {
+    "type": "grid",
+    "size": [ 162, 54 ],
+    "anchor_from": "top_left",
+    "anchor_to": "top_left",
+    "grid_dimensions": [ 9, 3 ],
+    "grid_item_template": "chest.chest_grid_item",
+    "collection_name": "container_items"
+  },
+
+  "large_chest_grid": {
+    "type": "grid",
+    "size": [ 162, 108 ],
+    "anchor_from": "top_left",
+    "anchor_to": "top_left",
+    "grid_dimensions": [ 9, 6 ],
+    "grid_item_template": "chest.chest_grid_item",
+    "collection_name": "container_items"
+  },
+
+  //// #endregion
+
+  ////---------------------------------------------------------------------------
+  //// #region chest area
+  ////---------------------------------------------------------------------------
+
+  "small_chest_panel_top_half": {
+    "type": "panel",
+    "size": [ "100%", "50%" ],
+    "offset": [ 0, 12 ],
+    "anchor_to": "top_left",
+    "anchor_from": "top_left",
+    "controls": [
+      { "chest_label@chest.chest_label": {} },
+      {
+        "small_chest_grid@chest.small_chest_grid": {
+          "offset": [ 7, 9 ]
+        }
+      }
+    ]
+  },
+
+  "large_chest_panel_top_half": {
+    "type": "panel",
+    "size": [ "100%", 132 ],
+    "offset": [ 0, 11 ],
+    "anchor_to": "top_left",
+    "anchor_from": "top_left",
+    "controls": [
+      { "chest_label@chest.chest_label": {} },
+      {
+        "large_chest_grid@chest.large_chest_grid": {
+          "offset": [ 7, 10 ]
+        }
+      }
+    ]
+  },
+
+  //// #endregion
+
+  ////---------------------------------------------------------------------------
+  //// #region screen
+  ////---------------------------------------------------------------------------
+
+  "small_chest_panel": {
+    "type": "panel",
+    "controls": [
+      { "chest_ui_option_toggle@chest.chest_ui_option_toggle": {} },
+      { "container_gamepad_helpers@common.container_gamepad_helpers": {} },
+      { "selected_item_details_factory@common.selected_item_details_factory": {} },
+      { "item_lock_notification_factory@common.item_lock_notification_factory": {} },
+      {
+        "root_panel@common.root_panel": {
+          "layer": 1,
+          "controls": [
+            { "common_panel@common.common_panel": {} },
+            {
+              "chest_panel": {
+                "type": "panel",
+                "layer": 5,
+                "controls": [
+                  { "small_chest_panel_top_half@chest.small_chest_panel_top_half": {} },
+                  { "inventory_panel_bottom_half_with_label@common.inventory_panel_bottom_half_with_label": {} },
+                  { "hotbar_grid@common.hotbar_grid_template": {} },
+                  { "inventory_take_progress_icon_button@common.inventory_take_progress_icon_button": {} },
+                  { "flying_item_renderer@common.flying_item_renderer": { "layer": 15 } }
+                ]
+              }
+            },
+            { "inventory_selected_icon_button@common.inventory_selected_icon_button": {} },
+            { "gamepad_cursor@common.gamepad_cursor_button": {} }
+          ],
+          "bindings": [
+            {
+              "binding_type": "view",
+              "source_control_name": "chest.chest_ui_options_toggle",
+              "source_property_name": "#toggle_state",
+              "target_property_name": "#visible"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  
+  "selected_item_details@common.selected_item_details": {
+    "offset": [ 0, 0 ]
+  },
+
+  "large_chest_panel": {
+    "type": "panel",
+    "controls": [
+      { "chest_ui_option_toggle@chest.chest_ui_option_toggle": {} },
+      { "container_gamepad_helpers@common.container_gamepad_helpers": {} },
+      {
+        "selected_item_details_factory@common.selected_item_details_factory": {
+          "control_name": "@chest.selected_item_details"
+        }
+      },
+      {
+        "item_lock_notification_factory@common.item_lock_notification_factory": {
+          "control_name": "@common.item_lock_notification"
+        }
+      },
+      {
+        "root_panel@common.root_panel": {
+          "size": [ 176, 220 ],
+          "layer": 1,
+          "controls": [
+            { "common_panel@common.common_panel": {} },
+            {
+              "chest_panel": {
+                "type": "panel",
+                "layer": 5,
+                "controls": [
+                  { "large_chest_panel_top_half@chest.large_chest_panel_top_half": {} },
+                  { "inventory_panel_bottom_half_with_label@common.inventory_panel_bottom_half_with_label": {} },
+                  { "hotbar_grid@common.hotbar_grid_template": {} },
+                  { "inventory_take_progress_icon_button@common.inventory_take_progress_icon_button": {} },
+                  { "flying_item_renderer@common.flying_item_renderer": { "layer": 15 } }
+                ]
+              }
+            },
+            { "inventory_selected_icon_button@common.inventory_selected_icon_button": {} },
+            { "gamepad_cursor@common.gamepad_cursor_button": {} }
+          ],
+          "bindings": [
+            {
+              "binding_type": "view",
+              "source_control_name": "chest.chest_ui_options_toggle",
+              "source_property_name": "#toggle_state",
+              "target_property_name": "#visible"
+            }
+          ]
+        }
+      }
+    ]
+  },
+
+  "ender_chest_panel@chest.small_chest_panel": {
+  },
+
+  "shulker_box_panel@chest.small_chest_panel": {
+  },
+
+  "barrel_panel@chest.small_chest_panel": {
+  },
+
+  "small_chest_screen@common.inventory_screen_common": {
+    "is_showing_menu": false, 
+    "absorbs_input": false,
+    "render_only_when_topmost": false,
+    "low_frequency_rendering": true,
+    "render_game_behind": true,
+    "force_render_below": true, 
+    "$close_on_player_hurt": false, // ~ changed to false
+    "$use_custom_pocket_toast|default": false,
+    "close_on_player_hurt": "$close_on_player_hurt",
+    "use_custom_pocket_toast": "$use_custom_pocket_toast",
+    // ~ to disable loading animation
+    "$screen_animations": [],
+    "$background_animations": [],
+    "variables": [
+      {
+        "requires": "$desktop_screen",
+        "$screen_content": "chest.small_chest_panel",
+        "$screen_bg_content": "common.screen_background",
+        "$screen_background_alpha": 0 // ~ changed to 0 to remove dark background effect
+      },
+      {
+        "requires": "$pocket_screen",
+        "$use_custom_pocket_toast": true,
+        "$screen_content": "pocket_containers.small_chest_panel"
+      }
+    ]
+  },
+
+  "large_chest_screen@common.inventory_screen_common": {
+    "is_showing_menu": false, 
+    "absorbs_input": false,
+    "force_render_below": true, 
+    "render_only_when_topmost": false,
+    "low_frequency_rendering": true,
+    "render_game_behind": true,
+    "$close_on_player_hurt": false, // ~ changed to false
+    "$use_custom_pocket_toast|default": false,
+    "close_on_player_hurt": "$close_on_player_hurt",
+    "use_custom_pocket_toast": "$use_custom_pocket_toast",
+    // ~ to disable loading animation
+    "$screen_animations": [],
+    "$background_animations": [],
+    "variables": [
+      {
+        "requires": "$desktop_screen",
+        "$screen_content": "chest.large_chest_panel",
+        "$screen_bg_content": "common.screen_background",
+        "$screen_background_alpha": 0 // ~ changed to 0 to remove dark background effect
+      },
+      {
+        "requires": "$pocket_screen",
+        "$use_custom_pocket_toast": true,
+        "$screen_content": "pocket_containers.large_chest_panel"
+      }
+    ]
+  },
+
+  "ender_chest_screen@common.inventory_screen_common": {
+    "is_showing_menu": false, 
+    "absorbs_input": false,
+    "force_render_below": true, 
+    "render_only_when_topmost": false,
+    "low_frequency_rendering": true,
+    "render_game_behind": true,
+    "$close_on_player_hurt": false, // ~ changed to false
+    "$use_custom_pocket_toast|default": false,
+    "close_on_player_hurt": "$close_on_player_hurt",
+    "use_custom_pocket_toast": "$use_custom_pocket_toast",
+    // ~ to disable loading animation
+    "$screen_animations": [],
+    "$background_animations": [],
+    "variables": [
+      {
+        "requires": "$desktop_screen",
+        "$screen_content": "chest.ender_chest_panel",
+        "$screen_bg_content": "common.screen_background",
+        "$screen_background_alpha": 0 // ~ changed to 0 to remove dark background effect
+      },
+      {
+        "requires": "$pocket_screen",
+        "$use_custom_pocket_toast": true,
+        "$screen_content": "pocket_containers.ender_chest_panel"
+      }
+    ]
+  },
+
+  "shulker_box_screen@chest.small_chest_screen": {
+    "is_showing_menu": false, 
+    "absorbs_input": false,
+    "force_render_below": true, 
+    "render_only_when_topmost": false,
+    "low_frequency_rendering": true,
+    "render_game_behind": true,
+    "$close_on_player_hurt": false, // ~ changed to false
+    "$use_custom_pocket_toast|default": false,
+    // ~ to disable loading animation
+    "$screen_animations": [],
+    "$background_animations": [],
+    "variables": [
+      {
+        "requires": "$desktop_screen",
+        "$screen_content": "chest.shulker_box_panel",
+        "$screen_bg_content": "common.screen_background",
+        "$screen_background_alpha": 0 // ~ changed to 0 to remove dark background effect
+      },
+      {
+        "requires": "$pocket_screen",
+        "$use_custom_pocket_toast": true,
+        "$screen_content": "pocket_containers.shulker_box_panel"
+      }
+    ]
+  },
+
+  "barrel_screen@chest.small_chest_screen": {
+    "is_showing_menu": false,
+    "absorbs_input": false,
+    "force_render_below": true, 
+    "render_only_when_topmost": false,
+    "low_frequency_rendering": true,
+    "render_game_behind": true,
+    "$close_on_player_hurt": false, // ~ changed to false
+    "$use_custom_pocket_toast|default": false,
+    // ~ to disable loading animation
+    "$screen_animations": [],
+    "$background_animations": [],
+    "variables": [
+      {
+        "requires": "$desktop_screen",
+        "$screen_content": "chest.barrel_panel",
+        "$screen_bg_content": "common.screen_background",
+        "$screen_background_alpha": 0 // ~ changed to 0 to remove dark background effect
+      },
+      {
+        "requires": "$pocket_screen",
+        "$use_custom_pocket_toast": true,
+        "$screen_content": "pocket_containers.barrel_panel"
+      }
+    ]
+  }
+}
+
+// #endregion
