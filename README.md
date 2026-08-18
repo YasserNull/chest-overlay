@@ -14,9 +14,6 @@
 ## Requirements
 - **Touch screen**: This pack works only on touch screen devices.
 
-## Why Chest Overlay?
-If you want to prank players on servers, this is for you.
-
 ## Installation
 You can download and install **Chest Overlay** via one of the following methods:
 
