@@ -27,6 +27,5 @@ You can download and install **Chest Overlay** via one of the following methods:
 **Chest Overlay** is licensed under the [GNU General Public License v3.0](LICENSE).
 
 ## Donate
-If you want to support me, I would be very grateful.
 
 [**Ko-fi**](https://ko-fi.com/yassernull)
